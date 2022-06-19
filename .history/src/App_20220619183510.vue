@@ -1,0 +1,30 @@
+<script setup>
+  import { ref } from 'vue';
+  import {tareaFactory} from './tareaSetup';
+  import { RouterLink, RouterView } from 'vue-router'
+  import todoService from './services/tareaService';
+  const {update} = tareaFactory();
+  const isLoading = ref(true);
+  async function prefetch() {
+    update(await tareaService.getTarea());
+    isLoading.value = false;
+  }
+  prefetch();
+</script>
+
+<template>
+  <div class="container">
+    <h2 v-if="isLoading">Loading TODOs...</h2>
+    <template v-if="!isLoading">
+      <ul>
+        <RouterLink to="/"><li>Todo List</li></RouterLink>
+        <RouterLink to="/new"><li>New Todo</li></RouterLink>
+      </ul>
+      <RouterView />
+    </template>
+  </div>
+</template>
+
+<style>
+@import './assets/base.css';
+</style>
